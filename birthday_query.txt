@@ -1,0 +1,196 @@
+CREATE DATABASE birthday;
+
+
+
+SELECT guest_fullname AS fullname, guest_phone AS "phone number" FROM guest
+
+JOIN gift 
+
+ON guest.guest_id = gift.guest_id
+
+
+JOIN state 
+
+ON state.state_id = guest.guest_state
+
+WHERE gift.gift_name = 'cash';
+
+
+
+
+SELECT * FROM guest
+
+JOIN state 
+
+ON state.state_id = guest.guest_state
+
+WHERE state.state_name = 'Zamfara';
+
+
+
+
+SELECT * FROM guest
+
+WHERE guest_gender = 'female';
+
+
+
+SELECT * FROM guest
+
+WHERE guest.guest_phone = '';
+
+
+
+SELECT continent AS CONTINENT, COUNT(name) AS COUNTRIES, SUM(population) AS POPULATION, SUM(area) AS AREA, SUM(gdp) AS GDP FROM world
+
+GROUP BY continent;
+
+
+
+SELECT continent AS CONTINENT, COUNT(name) AS COUNTRIES, SUM(population) AS POPULATION, SUM(area) AS AREA, SUM(gdp) AS GDP FROM world
+
+GROUP BY continent
+
+ORDER BY continent DESC;
+
+
+
+SELECT continent AS CONTINENT, COUNT(name) AS COUNTRIES, SUM(population) AS POPULATION, SUM(area) AS AREA, SUM(gdp) AS GDP FROM world
+
+WHERE continent IN ('Asia', 'Oceania')
+
+GROUP BY continent
+
+ORDER BY continent DESC;
+
+
+
+SELECT continent AS CONTINENT, COUNT(name) AS COUNTRIES, SUM(population) AS POPULATION, SUM(area) AS AREA, SUM(gdp) AS GDP FROM world
+
+GROUP BY continent HAVING gdp < 500000000000
+
+
+
+SELECT customers.cust_id, customers.cust_fname AS FIRSTNAME, customers.cust_lname AS LASTNAME, customers.cust_city AS CITY, COUNT(customer_orders.custord_custid) AS ORDERPLACED FROM customer_orders
+
+LEFT JOIN customers
+
+ON customers.cust_id = customer_orders.custord_custid
+
+GROUP BY customers.cust_id HAVING orderplaced > 1;
+
+
+
+
+SELECT continent AS CONTINENT, COUNT(name) AS COUNTRIES, SUM(population) AS POPULATION, SUM(area) AS AREA, SUM(gdp) AS GDP FROM world
+
+GROUP BY continent HAVING population >= 2000000;
+
+
+SELECT name FROM world 
+
+WHERE continent =(SELECT continent FROM world 
+
+WHERE name = 'Brazil');
+
+
+SELECT continent FROM world 
+
+WHERE name = 'Brazil' OR name = 'Canada';
+
+
+
+SELECT name FROM world WHERE continent NOT IN (SELECT continent FROM world 
+
+WHERE name = 'Brazil' OR name = 'Canada');
+
+
+
+SELECT name FROM world WHERE population > (SELECT population FROM world
+
+WHERE name ='Chad');
+
+
+SELECT name,population FROM world WHERE population > (SELECT population FROM world
+
+WHERE name ='Chad');
+
+
+SELECT continent , name as country FROM world
+
+ORDER BY continent ASC, country ASC;
+
+
+SELECT continent , AVG(population) as average_population FROM world
+
+WHERE continent = 'Africa';
+
+ORDER BY gdp DESC;
+
+
+
+SELECT continent , AVG(population) as average_population FROM world
+
+GROUP BY continent;
+
+
+SELECT name, MIN(gdp) AS GDP FROM world;
+
+
+
+SELECT SUM(custord_amt) * 0.01 FROM customer_orders
+
+WHERE  custord_custid = 1;
+
+INSERT INTO customers
+
+(cust_fname,cust_lname,cust_dob,cust_phone,cust_city)
+
+VALUES('Mark','Nobel','2022-04-26','222-222-222','Lagos'),
+      ('Thiery','Henry','1999-04-26','333-333-333','Uk'),
+      ('Ian','Wright','1978-04-26','444-444-444','USA');
+
+
+
+SELECT SUM(customer_orders.custord_amt) AS TOTALORDERS FROM customers
+
+RIGHT JOIN customer_orders
+
+ON customers.cust_id = customer_orders.custord_custid
+
+WHERE customers.cust_city = 'Lagos';
+
+
+SELECT  date_add(NOW(), INTERVAL 3 DAY);
+
+
+SELECT  date_add('1998-01-02', INTERVAL 31 DAY);
+
+
+SELECT  weekofyear(CURRENT_DATE);
+
+
+INSERT INTO customers
+
+SET cust_fname = 'Timmy',
+    cust_lname = 'Crook',
+    cust_dob = '1990-02-03',
+    cust_phone = '08094582467',
+    cust_city = 'Lagos',
+    cust_regdate = now(),
+    cust_pickup = date_add(now(), INTERVAL 5 DAY);
+
+
+
+SELECT * FROM `customers` WHERE WEEKOFYEAR(cust_pickup)=23;
+
+
+
+
+INSERT INTO customer_orders
+
+  SET custord_date = CURRENT_DATE,
+      custord_amt = 2500,
+      custord_status = 1,
+      custord_custid = 1,
+      order_pickup = date_add(now(), INTERVAL 3 DAY);
